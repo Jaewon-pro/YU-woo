@@ -61,7 +61,7 @@ public:
     SDL_Texture* make_text_texture(const char* str_text, SDL_Renderer* p_render, SDL_Color fg = { 255,255,255,255 }) const noexcept {
         // ASCII CHAR
 
-        // ÆùÆ®¸¦ ºÒ·¯¿À°í ÀÎÀÚ·Î ¹ŞÀº ¹®ÀÚ¿­À» ÅØ½ºÃÄ·Î ¸¸µê.
+        // í°íŠ¸ë¥¼ ë¶ˆëŸ¬ì˜¤ê³  ì¸ìë¡œ ë°›ì€ ë¬¸ìì—´ì„ í…ìŠ¤ì³ë¡œ ë§Œë“¦.
 
         SDL_Surface* tmp_surface = TTF_RenderText_Solid(this->p_ttf_font, str_text, fg);
         if (!tmp_surface) {
@@ -75,10 +75,10 @@ public:
     }
 
     SDL_Texture* make_text_texture(const wchar_t* wstr_text, SDL_Renderer* p_render, SDL_Color fg = { 255,255,255,255 }) const noexcept {
-        // wchar_t¸¦ ¹Ş¾Æ¼­ Uint16 ¹®ÀÚ·Î º¯È¯ ÈÄ,
-        // ÅØ½ºÃÄ »ı¼º
+        // wchar_të¥¼ ë°›ì•„ì„œ Uint16 ë¬¸ìë¡œ ë³€í™˜ í›„,
+        // í…ìŠ¤ì³ ìƒì„±
 
-        // Uint16 ´Â unsigned shortÀÌ´Ù.
+        // Uint16 ëŠ” unsigned shortì´ë‹¤.
 
         SDL_Surface* tmp_surface = TTF_RenderUNICODE_Solid(this->p_ttf_font, this->convert_to_Uint16(wstr_text), fg);
         if (!tmp_surface) {
@@ -103,8 +103,8 @@ public:
 
 
     static std::wstring string_to_wstring(std::string const& str) noexcept {
-        // º¯È¯ ÇÔ¼ö°¡ ¿©±â¿¡ ÀÖ´Â°Ô ÀÌ»óÇÏÁö¸¸
-        // stringÀ» wide world string À¸·Î º¯È¯ÇÏ´Â ÇÔ¼ö
+        // ë³€í™˜ í•¨ìˆ˜ê°€ ì—¬ê¸°ì— ìˆëŠ”ê²Œ ì´ìƒí•˜ì§€ë§Œ
+        // stringì„ wide world string ìœ¼ë¡œ ë³€í™˜í•˜ëŠ” í•¨ìˆ˜
         std::wstring wstr;
 
         return wstr.assign(str.begin(), str.end());
@@ -115,7 +115,7 @@ private:
     TTF_Font* p_ttf_font = nullptr;
 
 private:
-    // wchar_t¸¦ ¹Ş¾Æ¼­ Uint16 ¹®ÀÚ·Î º¯È¯
+    // wchar_të¥¼ ë°›ì•„ì„œ Uint16 ë¬¸ìë¡œ ë³€í™˜
     const Uint16* convert_to_Uint16(const wchar_t LString[]) const noexcept {
         return reinterpret_cast<const Uint16*>(&(LString[0]));
     }
