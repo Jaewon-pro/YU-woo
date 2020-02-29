@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Screen.hpp"
-#include "src_ingame/MapManager.hpp"
+#include "map/MapManager.hpp"
 #include "FileManager.hpp"
-#include "src_ingame/Entity.hpp"
-#include "src_ingame/Command.hpp"
+#include "entity/Entity.hpp"
+#include "key_bind/Command.hpp"
 
 class Game
 {
@@ -31,9 +31,7 @@ private:
 	// logic //
 	int game_loop_in_game(void) noexcept;
 
-	int update_game(int const& game_speed) noexcept;
-
-	void set_map(int const& size_col, int const& size_line, std::string const& seed) noexcept;
+	int update_game(int const game_speed) noexcept;
 
 	int game_loop_main_menu(void) noexcept;
 
@@ -44,7 +42,7 @@ private:
 
 	void draw_sprites(void) noexcept;
 
-	void draw_sprite_background(int const& col, int const& row) noexcept;
+	void draw_sprite_background(int const col, int const row) noexcept;
 	void draw_sprite_background(std::pair<double, double> pos) noexcept;
 
 };

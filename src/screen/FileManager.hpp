@@ -7,12 +7,12 @@
 class FileManager
 {
 public:
-	FileManager(void);
+	FileManager(void) noexcept;
 	~FileManager(void);
 
-	std::string get_font_path(void) const;
+	std::string get_font_path(void) const noexcept;
 
-	std::pair <int, int> get_size(void) const;
+	std::pair <int, int> get_size(void) const noexcept;
 
 private:
 	std::string			language;
@@ -23,7 +23,7 @@ private:
 
 
 private:
-	int load_setting(void);
+	int load_setting(void) noexcept;
 
 	inline int parse_txt(std::ifstream& file, std::string& str_data) noexcept;
 

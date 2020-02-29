@@ -3,7 +3,7 @@
 #include <string>
 #include <list>
 
-#include "cpp-sdl2/sdl.hpp"
+#include <cpp-sdl2/sdl.hpp>
 
 class Message
 {
@@ -11,13 +11,14 @@ public:
 	Message(sdl::Font const& font, sdl::Renderer const& render) noexcept;
 	~Message();
 
-	Message& operator<<(std::string const& str_text) noexcept;
-	Message& operator<<(std::wstring const& wstr_text) noexcept;
-	Message& operator<<(int num) noexcept;
-	//Message& operator<<(std::u8string const& u8str_text) noexcept;
+	template <typename Type_text>
+	Message& operator<<(Type_text text) noexcept {
+		this->buffer += text;
+		return *this;
+	}
 
 
-	void end_line(bool is_append_mode = true) noexcept;
+	void end_line(void) noexcept;
 	void draw(int margin = 0) const noexcept;
 
 	void clear_list(int num = 0) noexcept;
@@ -29,13 +30,14 @@ private:
 	// << 연산자로 입력한 문장들을 보관하는 버퍼
 	std::wstring buffer;
 
-	sdl::Font const& rhs_font;
-	sdl::Renderer const& rhs_render;
+	sdl::Font const& ref_font;
+	sdl::Renderer const& ref_render;
 
 	sdl::Color text_color = sdl::Color::White(); // 글자색
 
 	// 텍스트의 텍스쳐들을 리스트로 보관함.
 	std::list<sdl::Texture> l_message_texture;
 
-	void Message::make_texture_from_buffer(bool is_append_mode = true) noexcept;
+	void Message::make_texture_from_buffer(void) noexcept;
 };
+

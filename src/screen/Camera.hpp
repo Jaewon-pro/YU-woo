@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cpp-sdl2/sdl.hpp"
+#include <cpp-sdl2/sdl.hpp>
 
 class Camera
 {

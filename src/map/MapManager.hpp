@@ -66,6 +66,8 @@ public:
 
 	std::list<Actor> const& get_actor_list(void) const noexcept;
 	
+	Actor& actor_tmp(void) noexcept;
+
 	bool is_out_of_map(int const& pos_col, int const& pos_line) const noexcept;
 
 	void update(void) noexcept;

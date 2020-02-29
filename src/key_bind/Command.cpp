@@ -1,16 +1,16 @@
 #include "Command.hpp"
-#include "MapManager.hpp"
-#include "Entity.hpp"
+#include "map/MapManager.hpp"
+#include "entity/Entity.hpp"
 
-void MoveCommand::excute(MapManager& map_, std::pair <double, double> pos) noexcept {
-	//map_.get_selected_actor().append_actor(STATE::MOVE, pos);
+void MoveCommand::excute(Actor& actor, std::pair <double, double> pos) noexcept {
+	actor.append_action(STATE::MOVE, pos);
 }
 
 
-void AttackCommand::excute(MapManager& map_, std::pair <double, double> pos) noexcept {
+void AttackCommand::excute(Actor& actor, std::pair <double, double> pos) noexcept {
 
 }
 
-void TestCommand::excute(MapManager& map_, std::pair <double, double> pos) noexcept {
+void TestCommand::excute(Actor& actor, std::pair <double, double> pos) noexcept {
 	
 }

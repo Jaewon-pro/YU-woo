@@ -1,13 +1,13 @@
 #pragma once
 
 #define CPP_SDL2_USE_SDL_IMAGE
-#include "cpp-sdl2/sdl.hpp"
+#include <cpp-sdl2/sdl.hpp>
 
 #include "ObjectManager.hpp"
 #include "Button.hpp"
 #include "Camera.hpp"
 #include "Message.hpp"
-#include "src_ingame/KeyBind.hpp"
+#include "key_bind/KeyBind.hpp"
 
 enum class MENU_TYPE : int {
 	MAIN_MENU, IN_GAME, QUIT
@@ -29,11 +29,11 @@ public:
 
 
 	// in - game
-	Command* handle_events() noexcept;
+	Command* handle_events(void) noexcept;
 
-	void update_animation() noexcept;
+	void update(void) const noexcept;
 
-	void render() noexcept;
+	void render(void) const noexcept;
 	void end_redraw() noexcept;
 
 	// get
@@ -49,13 +49,13 @@ public:
 	void clear_screen(void) const noexcept;
 
 	// draw
-	void draw_terrain(const int index, const int col, const int line) noexcept;
-	void draw_block(const int index, const int col, const int line) noexcept;
+	void draw_terrain(const int index, const int col, const int line) const noexcept;
+	void draw_block(const int index, const int col, const int line) const noexcept;
 
 	void draw_buttons(void) noexcept;
 
-	void draw_sprite(double const& col, double const& line) noexcept;
-	void draw_sprite(std::pair<double, double> const& pos) noexcept;
+	void draw_sprite(double col, double line) noexcept;
+	void draw_sprite(std::pair<double, double> pos) noexcept;
 
 
 	// Main menu
@@ -79,11 +79,10 @@ private:
 	sdl::Event		event_handler;		// 이벤트 처리
 	sdl::Color		background_color;	// 배경 색
 
-	std::vector <std::unique_ptr<Object_tex>> v_object;
-	std::vector <std::unique_ptr<Button>> v_button;
+	std::vector <std::unique_ptr <Object_tex>> v_object;
+	std::vector <std::unique_ptr <Button>> v_button;
 
-	// sprite 이미지를 모은 벡터
-	std::vector <std::unique_ptr<Sprite> > v_sprite;
+	std::vector <std::unique_ptr <Sprite>> v_sprite;
 
 	TextureManager	texture_button;
 

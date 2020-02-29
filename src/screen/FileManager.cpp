@@ -1,10 +1,7 @@
 #include "FileManager.hpp"
 
 
-/////////////////////////////////////////////////////////////////////
-//					class ImportManager def
-
-FileManager::FileManager(void) {
+FileManager::FileManager(void) noexcept {
 	this->load_setting();
 }
 
@@ -13,29 +10,19 @@ FileManager::~FileManager(void) {
 }
 
 
-
-
-/////////////////////////////////////////////////////////////////////
-//					ImportManager public member funtion
-
-std::string FileManager::get_font_path(void) const {
+std::string FileManager::get_font_path(void) const noexcept {
 	// 폰트가 위치한 경로를 알맞게 맞춰서 넘겨줌
 	return "data\\fonts\\" + this->language + "\\" + font_name;
 }
 
 
-std::pair <int, int> FileManager::get_size(void) const {
+std::pair <int, int> FileManager::get_size(void) const noexcept {
 	// 게임 창 사이즈 넘겨줌
 	return this->screen_size;
 }
 
 
-//
-/////////////////////////////////////////////////////////////////////
-//					ImportManager private member funtion
-
-
-int FileManager::load_setting(void) {
+int FileManager::load_setting(void) noexcept {
 	// 버전, 기본 세팅(화면 크기, 모드 목록)
 	// 
 

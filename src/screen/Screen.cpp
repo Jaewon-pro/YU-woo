@@ -30,13 +30,13 @@ Screen::Screen(const char* title, std::pair <int, int> const& screen_size, bool 
 		exit(112);
 	}
 
-	catch (std::exception const& e ) {	// font 파일을 못 찾거나 등등의 오류
-		std::cerr << e.what() << font_path << "\n";
+	catch (std::exception const& error ) {	// font 파일을 못 찾거나 등등의 오류
+		std::cerr << error.what() << font_path << "\n";
 		std::cerr << "In function: " << __FUNCDNAME__ << "\n";
 
 		sdl::show_message_box(
 			SDL_MESSAGEBOX_ERROR,
-			"Fail to Load Font",
+			"Fail to load Font",
 			font_path,
 			this->window );
 
@@ -67,20 +67,19 @@ Screen::~Screen() noexcept {
 int Screen::load_ingame_texture(void) noexcept {
 	std::clog << "\nLoading a game\n";
 
-	// 기존의 버튼과 오브젝트 비우기.
 	this->clear_vectors();
+
 
 	this->key.load_setting();
 
-	// Object tile, block image 생성
-	const std::string path_tile = "assets/tile/tile.png";
+	const std::string path_terrain = "assets/tile/tile.png";
 	const std::string path_block = "assets/block/block.png";
 
 	// png 파일에서 읽어올 한 이미지의 픽셀수
 	// 여러 이미지가 한 png 파일에 포함되어 있다. 따라서 이를 구분 지어주는 크기
 	int constexpr PIXEL_BLOCK = 64;
 
-	this->v_object.emplace_back(std::make_unique< Object_tex>(this->renderer, path_tile, PIXEL_BLOCK));
+	this->v_object.emplace_back(std::make_unique< Object_tex>(this->renderer, path_terrain, PIXEL_BLOCK));
 	this->v_object.emplace_back(std::make_unique< Object_tex>(this->renderer, path_block, PIXEL_BLOCK));
 
 	// sprite 이미지
@@ -89,21 +88,19 @@ int Screen::load_ingame_texture(void) noexcept {
 
 	// Button 생성
 
-	int constexpr PIXEL_BUTTON = 32;
-	sdl::Rect button_size = { 0, 0, 150, 50 };
+	sdl::Rect button_rect = { 0, 0, 150, 50 };
 
+	std::list<std::wstring> menu_text{ L"한글", L"GO TO THE MAIN MENU" };
 
-	this->v_button.emplace_back(std::make_unique< Button >(
-		this->texture_button, this->font, this->renderer, L"한글", false, button_size, PIXEL_BUTTON
-	));
+	for (auto const& text : menu_text) {
+		int constexpr PIXEL_BUTTON = 32;
 
-	button_size.x += button_size.w;
+		this->v_button.emplace_back(std::make_unique< Button >(
+			this->texture_button, this->font, this->renderer, text, false, button_rect, PIXEL_BUTTON
+			));
 
-	this->v_button.emplace_back(std::make_unique< Button >(
-		this->texture_button, this->font, this->renderer, "GO TO THE MAIN MENU", false, button_size, PIXEL_BUTTON
-	));
-
-	this->renderer.clear(this->background_color);
+		button_rect.x += button_rect.w;
+	}
 
 	this->should_redraw = true;
 	this->should_redraw_button = true;
@@ -112,7 +109,7 @@ int Screen::load_ingame_texture(void) noexcept {
 }
 
 
-Command* Screen::handle_events() noexcept {
+Command* Screen::handle_events(void) noexcept {
 	// 단순 화면과 연관된 사용자 입력은 여기서 처리하고
 	// 게임 내적과 연관된 사용자 입력은 class KeyBind, Command 에서 처리한다.
 	
@@ -123,9 +120,9 @@ Command* Screen::handle_events() noexcept {
 		break;
 
 	case SDL_MOUSEMOTION:
-		for (auto const& a : this->v_button) {
+		for (auto const& p_button : this->v_button) {
 			// 마우스가 움직여서 버튼위에 위치하는지 확인함
-			if (a->check_mouse(this->event_handler.motion.x, this->event_handler.motion.y, false)) {
+			if (p_button->check_mouse(this->event_handler.motion.x, this->event_handler.motion.y, false)) {
 				this->should_redraw_button = true;
 			}
 		}
@@ -219,8 +216,8 @@ Command* Screen::handle_events() noexcept {
 
 
 		default:
-			break;
-		}		// me_event.key.keysym.sym
+			return this->key[this->event_handler.key.keysym.sym];
+		}		// this->event_handler.key.keysym.sym
 		break;	// SDL_KEYDOWN
 
 
@@ -247,7 +244,7 @@ void Screen::clear_screen(void) const noexcept {
 	this->renderer.clear(this->background_color);
 }
 
-void Screen::update_animation() noexcept {
+void Screen::update(void) const noexcept {
 
 	// sprite와 같은 애니메이션이 필요한 객체들은 반복문 동안 계속 변해야 하므로 여기서 update 시킨다.
 	for (auto const& p_sprite : this->v_sprite) {
@@ -256,7 +253,7 @@ void Screen::update_animation() noexcept {
 }
 
 
-void Screen::render() noexcept {
+void Screen::render(void) const noexcept {
 
 	this->renderer.present();
 }
@@ -265,7 +262,7 @@ void Screen::end_redraw() noexcept {
 	this->should_redraw = false;
 }
 
-void Screen::draw_terrain(const int index, const int col, const int line) noexcept {
+void Screen::draw_terrain(const int index, const int col, const int line) const noexcept {
 
 	this->v_object[0]->set_image_src_from_index(index);
 
@@ -273,7 +270,7 @@ void Screen::draw_terrain(const int index, const int col, const int line) noexce
 
 }
 
-void Screen::draw_block(const int index, const int col, const int line) noexcept {
+void Screen::draw_block(const int index, const int col, const int line) const noexcept {
 	if (index < 1) return;	// block::void는 생략
 	this->v_object[1]->set_image_src_from_index(index);
 
@@ -291,11 +288,11 @@ void Screen::draw_buttons(void) noexcept {
 	this->should_redraw_button = false;
 }
 
-void Screen::draw_sprite(double const& col, double const& line) noexcept {
+void Screen::draw_sprite(double col, double line) noexcept {
 	this->v_sprite[0]->draw(this->renderer, this->camera.get_rect_dst(col, line));
 }
 
-void Screen::draw_sprite(std::pair<double, double> const& pos) noexcept {
+void Screen::draw_sprite(std::pair<double, double> pos) noexcept {
 	this->draw_sprite(pos.first, pos.second);
 }
 

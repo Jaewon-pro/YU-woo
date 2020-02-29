@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cpp-sdl2/ttf.hpp"
+#include <cpp-sdl2/ttf.hpp>
 
 #include "ObjectManager.hpp"
 

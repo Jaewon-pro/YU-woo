@@ -1,8 +1,8 @@
 #pragma once
 
-#include <map>			// bind keys
+#include <map>
 
-#include "Command.hpp"	// class Command
+#include "Command.hpp"
 
 
 class KeyBind

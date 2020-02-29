@@ -12,7 +12,7 @@ Button::Button(TextureManager& te, sdl::Font const& font, sdl::Renderer& render,
 	bool const toggle,
 	sdl::Rect size,
 	int image_pixel_size) noexcept
-	: Button(te, font, render, font.string2wstr(text).c_str(),
+	: Button(te, font, render, font.string_to_wstring(text).c_str(),
 		toggle, size, image_pixel_size)
 {
 }
@@ -27,7 +27,7 @@ Button::Button(TextureManager& te, sdl::Font const& font, sdl::Renderer& render,
 	, texture_text{ font.make_text_texture( text.c_str(), render.ptr() ) }
 {
 	// 이미지에서 가져올 부분 설정
-	this->ref_texture_button.set_src(0, 0, image_pixel_size, image_pixel_size);
+	this->ref_texture_button.set_src({ 0, 0, image_pixel_size, image_pixel_size });
 
 	// text texture의 크기 확인
 	this->text_width = this->texture_text.size().x;

@@ -1,5 +1,5 @@
 #include "MapManager.hpp"
-#include "Entity.hpp"
+#include "entity/Entity.hpp"
 
 #include <random>
 
@@ -15,7 +15,7 @@ MapManager::MapManager(int mod_num) noexcept
 
 	for (int n = 0; n < 6; ++n) {
 
-		this->v_terrain_info.emplace_back(Terrain {
+		this->v_terrain_info.emplace_back( Terrain {
 			.tag {.mod_id{ mod_id }, .index{ index }, .name{ L"void", } },
 			.movement_speed{ -1 }, .transparency{ 0 }, .flammability{ 0 }, .layer{ 0 },
 		} );
@@ -26,7 +26,7 @@ MapManager::MapManager(int mod_num) noexcept
 	index = 0;
 	for (int n = 0; n < 8; ++n) {
 
-		this->v_block_info.emplace_back(Block{
+		this->v_block_info.emplace_back( Block {
 			 .tag {.mod_id{ mod_id }, .index{ index }, .name{ L"air", } },
 			.hp{ 10 }
 		} );
@@ -118,6 +118,9 @@ std::list<Actor> const& MapManager::get_actor_list(void) const noexcept {
 	return this->locale[this->current_index].l_actor;
 }
 
+Actor& MapManager::actor_tmp(void) noexcept {
+	return this->locale[this->current_index].l_actor.front();
+}
 
 bool MapManager::is_out_of_map(int const& col, int const& line) const noexcept {
 	if (col <= -1  || col  >= this->locale[this->current_index].col)  return true;
@@ -202,7 +205,7 @@ void MapManager::generate_by_seed(int terrain_type, int const& seedB, int const&
 	}
 
 
-	for (int n = 0; n < 4; ++n) // 반복 횟수 많이 돌릴수록 블럭과 타일이 단순화 된다.
+	for (int repeat = 0; repeat < 4; ++repeat)
 	{
 
 	for (int row = 0; row < locale_map.line; ++row) {
@@ -214,9 +217,9 @@ void MapManager::generate_by_seed(int terrain_type, int const& seedB, int const&
 					if (x == row && y == col) continue;	// 자기 자신은 제외
 					if (this->is_out_of_map(col + y, row + x)) continue; // out of index 에러 방지
 
-					if (locale_map.v_terrain[row + x][col + y] == &SOIL)	++cnt_terrain_major;
-					if (locale_map.v_terrain[row + x][col + y] == &WATER)		++cnt_terrain_water;
-					if (locale_map.v_terrain[row + x][col + y] == &WATER_DEEP)	++cnt_terrain_water;
+					if (locale_map.v_terrain[row + x][col + y] == &SOIL)       ++cnt_terrain_major;
+					if (locale_map.v_terrain[row + x][col + y] == &WATER)      ++cnt_terrain_water;
+					if (locale_map.v_terrain[row + x][col + y] == &WATER_DEEP) ++cnt_terrain_water;
 
 				}// ++y
 			}// ++x

@@ -5,17 +5,18 @@
 
 Game::Game(const char* title, bool fullscreen, unsigned max_fps)
 	: FRAME_DELAY{ 1000 / max_fps }
-	, screen {title, this->import_manage.get_size(), fullscreen, this->import_manage.get_font_path()}
+	, screen{ title, this->import_manage.get_size(), fullscreen, this->import_manage.get_font_path() }
 	, map{ 1 }
-{ }
+{
 
-Game::~Game() {
-	
+	this->screen.message_log << L"as한f";
+	this->screen.message_log.end_line();
 }
 
+Game::~Game() {
 
-/////////////////////////////////////////////////////////////////////
-//					Public funtion In-Game
+}
+
 
 int Game::game_loop(void) noexcept {
 	// 메뉴 선택 등의 분기를 담당하는 함수
@@ -78,7 +79,7 @@ int Game::game_loop_in_game(void) noexcept {
 			Command* command = this->screen.handle_events();
 			
 			if (command) {
-				command->excute(this->map, this->screen.get_mouse_pos());
+				command->excute(this->map.actor_tmp(), this->screen.get_mouse_pos());
 			}
 		}
 
@@ -86,17 +87,17 @@ int Game::game_loop_in_game(void) noexcept {
 
 		auto frame_time = sdl::Timer::ticks_u32() - frame_start;
 
-		if (FRAME_DELAY > frame_time) {
-			sdl::Timer::delay(FRAME_DELAY - frame_time);
+		if (this->FRAME_DELAY > frame_time) {
+			sdl::Timer::delay(this->FRAME_DELAY - frame_time);
 		}
 	}
 	return 0;
 }
 
-int Game::update_game(int const& game_speed) noexcept {
+int Game::update_game(int const game_speed) noexcept {
 	// 게임 내적 요소와 프레임 마다 바뀌는 요소들을 업데이트 하는 함수
 
-	if (game_speed == 0) return 1;
+	if (game_speed < 1) return 1;
 
 	// previous_time의 값을 통해 일정 시간에 도달해야지만 1 게임 Tick이 지나게 설정
 	if ( (sdl::Timer::ticks_u32() - this->previous_time) < static_cast<uint32_t>(300 / game_speed) ) {
@@ -109,7 +110,7 @@ int Game::update_game(int const& game_speed) noexcept {
 	this->map.update();
 
 	// 스크린 //
-	this->screen.update_animation();
+	this->screen.update();
 
 	this->draw_sprites();
 
@@ -176,7 +177,7 @@ void Game::draw_sprites(void) noexcept {
 	this->screen.render();
 }
 
-void Game::draw_sprite_background(int const& col, int const& row) noexcept {
+void Game::draw_sprite_background(int const col, int const row) noexcept {
 	for (int i = 0; i < 2; ++i) {
 		for (int j = 0; j < 2; ++j) {
 			// 주위 2x2에만 그림을 그림.

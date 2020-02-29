@@ -1,7 +1,8 @@
 #include "Message.hpp"
 
+
 Message::Message(sdl::Font const& font, sdl::Renderer const& render) noexcept
-	: rhs_font{ font }, rhs_render{ render },
+	: ref_font{ font }, ref_render{ render },
 	text_boundary{ 0, 50, 150, 1000 }
 {
 }
@@ -10,24 +11,28 @@ Message::~Message() {
 	this->clear_list();
 }
 
-Message& Message::operator<<(std::string const& str_text) noexcept {
-	// 예시)) Message log; log << "test text";
-	this->buffer += sdl::Font::string2wstr(str_text);
+
+template<>
+Message& Message::operator<< <std::string> (std::string text) noexcept {
+	this->buffer += sdl::Font::string_to_wstring(text);
 	return *this;
 }
 
-Message& Message::operator<<(std::wstring const& wstr_text) noexcept {
+template<>
+Message& Message::operator<< <std::wstring> (std::wstring wstr_text) noexcept {
 	this->buffer += wstr_text;
 	return *this;
 }
 
-Message& Message::operator<<(int num) noexcept {
+template<>
+Message& Message::operator<< <int> (int num) noexcept {
 	this->buffer += std::to_wstring(num);
 	return *this;
 }
 
 
-void Message::end_line(bool is_append_mode) noexcept {
+
+void Message::end_line(void) noexcept {
 	// 줄을 마무리 하고 텍스쳐를 만들어서 리스트에 추가함. 줄을 마칠때 무조건 써줘야 한다.
 	// is_append_mode가 true 이면 새로운 줄을 뒤에 추가 기본값
 
@@ -35,8 +40,8 @@ void Message::end_line(bool is_append_mode) noexcept {
 		return;
 	}
 
-	int width_text = 0, h = 0; // 폰트와 글자에 따라 텍스쳐 길이가 달라지므로 문장 길이 확인
-	this->rhs_font.size_text(this->buffer, width_text, h);
+	int width_text = 0, h = 0;
+	this->ref_font.size_text(this->buffer, width_text, h);
 
 	// 버퍼의 문장이 너무 길면 공백이나 \n 등등을 기점으로 다음 문장으로 넘김
 	while (this->text_boundary.w < width_text) {
@@ -53,18 +58,18 @@ void Message::end_line(bool is_append_mode) noexcept {
 
 		// 공백 이전 까지만 텍스쳐로 만듦
 		this->buffer = this->buffer.substr(0, index_space);
-		this->make_texture_from_buffer(is_append_mode);
+		this->make_texture_from_buffer();
 
 		// 버퍼에 텍스쳐를 만든 텍스트 뒷부분으로 이동 대입
 		this->buffer = std::move(wstr_tmp);
 
 		width_text = 0, h = 0; // 폰트와 글자에 따라 텍스쳐 길이가 달라지므로 문장 길이 확인
-		this->rhs_font.size_text(this->buffer, width_text, h);
+		this->ref_font.size_text(this->buffer, width_text, h);
 	}
 
-	this->make_texture_from_buffer(is_append_mode);
+	this->make_texture_from_buffer();
 
-	this->buffer = L""; // 버퍼 초기화
+	this->buffer = L"";
 }
 
 void Message::draw(int margin) const noexcept {
@@ -74,7 +79,7 @@ void Message::draw(int margin) const noexcept {
 	for (auto const& itr_tex : this->l_message_texture) {
 		// list 반복자 순서대로 boundary 내에서 문자열 텍스쳐 표시함.
 
-		this->rhs_render.render_copy( itr_tex,
+		this->ref_render.render_copy( itr_tex,
 			{ 0, 0, itr_tex.size().x, itr_tex.size().y },
 			{ text_boundary.x + margin, text_boundary.y + line_pixel, itr_tex.size().x, itr_tex.size().y});
 
@@ -89,22 +94,15 @@ void Message::draw(int margin) const noexcept {
 void Message::clear_list(int num) noexcept {
 	// 만들어진 리스트의 텍스쳐들을 num=0 숫자가 될때까지 지움.
 	while (this->l_message_texture.size() > num) {
-		this->l_message_texture.pop_back(); // 뒤부터 지움
+		this->l_message_texture.pop_back();
 	}
 }
 
 
 // private function
 
-void Message::make_texture_from_buffer(bool is_append_mode) noexcept {
+void Message::make_texture_from_buffer(void) noexcept {
 	// 버퍼에 있는 wstring을 리스트 맨 뒤에 추가함.
-	if (is_append_mode) {
-		this->l_message_texture.emplace_back(
-			sdl::Texture(this->rhs_font.make_text_texture(this->buffer.c_str(), this->rhs_render.ptr(), this->text_color)));
-	}
-	// 버퍼에 있는 wstring을 리스트 맨 앞에 추가함.
-	else {
-		this->l_message_texture.emplace_front(
-			sdl::Texture(this->rhs_font.make_text_texture(this->buffer.c_str(), this->rhs_render.ptr(), this->text_color)));
-	}
+	this->l_message_texture.emplace_back(
+		sdl::Texture(this->ref_font.make_text_texture(this->buffer.c_str(), this->ref_render.ptr(), this->text_color)));
 }
