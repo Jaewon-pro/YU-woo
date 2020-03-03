@@ -6,10 +6,7 @@
 
 class Coordinate;
 class Actor;
-class Item;
 
-//////////////////////////////////////////////////////
-//				class Entity defintion
 
 class Coordinate
 {
@@ -21,14 +18,16 @@ public:
 
 	virtual ~Coordinate() noexcept;
 
-	void set_pos(double const& col, double const& line) noexcept;
+	void set_pos(double col, double line) noexcept;
 
-	void move_pos(double const& dCol, double const& dLine) noexcept;
+	void move_pos(double dCol, double dLine) noexcept;
+
+	void move_toward(double col, double line) noexcept;
 
 	std::pair <double, double> get_pos(void) const noexcept { return this->pos; }
 
-	int compare(std::pair <double, double> other_pos, double dist = 0) const noexcept;
-	int compare(Coordinate const& other, double dist = 0) const noexcept;
+	int compare(std::pair <double, double> other_pos, double interval) const noexcept;
+	int compare(Coordinate const& other, double interval) const noexcept;
 
 protected:
 	void round(void) noexcept;
@@ -38,24 +37,21 @@ private:
 };
 
 
-//////////////////////////////////////////////////////
-//				class Actor defintion
 
 enum class STATE : int {
 	WAIT, SLEEP, MOVE, ATTAK,
 };
 
-class Actor :public Coordinate
+class Actor : public Coordinate
 {
 public:
-	//default constructor
 	Actor() noexcept;
 
 	Actor(std::pair<double, double> pos) noexcept;
 
 	~Actor() noexcept;
 
-	void set_name(std::wstring const& wstr_name) noexcept;
+	void set_name(std::wstring const wstr_name) noexcept;
 	
 
 	std::wstring get_name(void) const noexcept { return this->name; }
@@ -63,15 +59,11 @@ public:
 	int update_act(void) noexcept;
 
 
-	void modify_hp(int const& num) noexcept;
+	void modify_hp(int const num) noexcept;
 
-	void clear_act(void) noexcept;
+	int append_action(STATE, std::pair <int, int>) noexcept;
+	int append_action(STATE, std::pair <double, double>) noexcept;
 
-	int append_action(STATE const&, Coordinate const&) noexcept;
-	int append_action(STATE const&, std::pair <int, int>) noexcept;
-	int append_action(STATE const&, std::pair <double, double>) noexcept;
-
-	// int job_giver( // ai
 
 private:
 	int hp = 1;
@@ -84,6 +76,9 @@ private:
 	std::wstring name;
 	std::list<std::pair<STATE, std::pair <double, double>> > l_command;
 
+
+private:
+	void clear_command_list(void) noexcept;
 };
 
 

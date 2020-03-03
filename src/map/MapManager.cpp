@@ -7,7 +7,8 @@
 
 
 MapManager::MapManager(int mod_num) noexcept
-	: mod_num{ mod_num }, current_index{ 0 }
+	: mod_num{ mod_num }
+	, current_index{ 0 }
 {
 	// json 등등 파일 열기
 
@@ -36,7 +37,7 @@ MapManager::MapManager(int mod_num) noexcept
 }
 
 
-MapManager::~MapManager() noexcept {
+MapManager::~MapManager() {
 	this->v_terrain_info.clear();
 	this->v_terrain_info.shrink_to_fit();
 	
@@ -282,11 +283,18 @@ void MapManager::generate_by_seed(int terrain_type, int const& seedB, int const&
 }
 
 
-bool MapManager::find_way(std::pair<int, int> const& dst, std::pair<int, int> const& src) const noexcept {
+bool MapManager::find_way(std::pair<int, int> const dst, std::pair<int, int> const src) const noexcept {
 
 	// https://zerowidth.com/2013/a-visual-explanation-of-jump-point-search.html
 	// https://joonleestudio.tistory.com/28
 	// jump point search
+
+	std::list < std::pair<int, int> > node;
+
+	node.emplace_back(src);
+
+
+
 
 	return true;
 }

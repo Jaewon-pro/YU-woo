@@ -5,39 +5,36 @@
 class Camera
 {
 public:
-	Camera(int width, int height);
+	Camera(int screen_width, int screen_height) noexcept;
 
-	void move_camera(int const& col, int const& line) noexcept;
+	void move_camera(int const dcol, int const dline) noexcept;
 
-	bool zoom_camera(int const& zoom) noexcept;
+	bool zoom_camera(int const zoom) noexcept;
 
-	void set_screen_size(int const& w, int const& h) noexcept;
+	void set_screen_size(int const w, int const h) noexcept;
 
-	int get_col()	const { return this->column; }
-	int get_line()	const { return this->line; }
+	int get_col()	const { return this->anchor_column; }
+	int get_line()	const { return this->anchor_line; }
 
-	sdl::Rect get_rect_dst(int col, int line) const;
-	sdl::Rect get_rect_dst(double const& col, double const& line) const;
+	sdl::Rect get_rect_dst(int const col, int const line) const noexcept;
+	sdl::Rect get_rect_dst(double const col, double const line) const noexcept;
 
-	bool find_mouse_pos(int const& mouse_col, int const& mouse_line,
-		int& map_col, int& map_line) const;
+	bool find_mouse_pos(int const mouse_col, int const mouse_line,
+		int& map_col, int& map_line) const noexcept;
 
-	void jump_to_loc(int const& col, int const& line);
+	void jump_to_loc(int const map_col, int const map_line) noexcept;
 
 
 private:
-	// 밀면up 확대, 마우스 스크롤 당기면down 축소 ( 이미지 작아짐 )
-	// 한 게임 블럭이 몇 픽셀을 차지하는지 저장한 변수
-	int				zoom_level;
+	// 게임 블럭 단위가 화면에서 몇 픽셀을 차지하는지 저장한 변수
+	int zoom_level;
 
-	// sdl::Rect { m_column, m_line, m_zoom_level (width) , m_zoom_level (height) }
-	// 카메라 위치
-	// 오른쪽 화살표를 누른건 column 변수의 값을 늘리고 이미지의 출력을 왼쪽으로 옮김.
-	int				column;
-	int				line;
+	// 게임 객체들을 그리기 시작할 카메라 위치
+	int anchor_column;
+	int anchor_line;
 
 	// 스크린 크기 / 2 저장
-	int				semi_width;
-	int				semi_height;
-
+	int semi_width;
+	int semi_height;
 };
+

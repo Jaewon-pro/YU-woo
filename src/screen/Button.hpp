@@ -28,7 +28,7 @@ public:
 	bool check_mouse(int const& col, int const& line, bool press) noexcept;
 
 
-	bool get_clicked(void) const noexcept { return this->is_clicked; }
+	bool get_clicked(void)  const noexcept { return this->is_clicked; }
 	bool get_on_mouse(void) const noexcept { return this->is_mouse_on; }
 
 

@@ -15,7 +15,7 @@ public:
 
 	void clear(void) noexcept;
 
-	Command* operator[](int keycode) const noexcept;
+	Command* operator[](int const keycode) noexcept;
 
 private:
 	std::map<int, Command*> key; // SDLK, Command

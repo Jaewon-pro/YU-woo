@@ -38,6 +38,6 @@ private:
 	// 텍스트의 텍스쳐들을 리스트로 보관함.
 	std::list<sdl::Texture> l_message_texture;
 
-	void Message::make_texture_from_buffer(void) noexcept;
+	void make_texture_from_buffer(void) noexcept;
 };
 

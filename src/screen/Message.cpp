@@ -2,10 +2,10 @@
 
 
 Message::Message(sdl::Font const& font, sdl::Renderer const& render) noexcept
-	: ref_font{ font }, ref_render{ render },
-	text_boundary{ 0, 50, 150, 1000 }
-{
-}
+	: ref_font{ font }
+	, ref_render{ render }
+	, text_boundary{ 0, 50, 150, 1000 }
+{ }
 
 Message::~Message() {
 	this->clear_list();
@@ -34,10 +34,9 @@ Message& Message::operator<< <int> (int num) noexcept {
 
 void Message::end_line(void) noexcept {
 	// 줄을 마무리 하고 텍스쳐를 만들어서 리스트에 추가함. 줄을 마칠때 무조건 써줘야 한다.
-	// is_append_mode가 true 이면 새로운 줄을 뒤에 추가 기본값
 
 	if (this->buffer.compare(L"") == 0) {
-		return;
+		this->buffer = L" ";
 	}
 
 	int width_text = 0, h = 0;

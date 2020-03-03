@@ -22,10 +22,10 @@ public:
 	);
 
 
-	~Screen() noexcept;
+	~Screen();
 
 	// Load
-	int load_ingame_texture() noexcept;
+	int load_ingame_texture(void) noexcept;
 
 
 	// in - game
@@ -34,7 +34,7 @@ public:
 	void update(void) const noexcept;
 
 	void render(void) const noexcept;
-	void end_redraw() noexcept;
+	void end_redraw(void) noexcept;
 
 	// get
 	MENU_TYPE get_menu_type(void) const noexcept { return this->menu_type; }

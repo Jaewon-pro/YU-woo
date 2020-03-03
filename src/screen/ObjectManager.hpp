@@ -9,12 +9,11 @@ class TextureManager
 {
 public:
 	TextureManager(sdl::Renderer const& renderer,
-		std::string s_path, int size);
-
+		std::string image_path, int size);
 
 	explicit TextureManager(SDL_Texture* p_text) noexcept;
 
-	virtual ~TextureManager(void) noexcept;
+	virtual ~TextureManager(void);
 
 
 	TextureManager(TextureManager&& other) noexcept { *this = std::move(other); }
@@ -37,7 +36,7 @@ public:
 	void set_src(int const col, int const line) noexcept;
 
 	sdl::Rect get_src(void) const noexcept { return this->src; }
-	sdl::Texture const& get_texture(void) const { return this->texture; }
+	sdl::Texture const& get_texture(void) const noexcept { return this->texture; }
 
 	void draw(sdl::Renderer const& r, sdl::Rect dst) const noexcept;
 	
@@ -56,7 +55,7 @@ class Object_tex : public TextureManager
 public:
 	Object_tex(sdl::Renderer const& r, std::string image_path, int size) noexcept;
 
-	~Object_tex() noexcept;
+	~Object_tex();
 
 	void set_image_src_from_index(int const index) noexcept;
 
@@ -72,7 +71,7 @@ class Sprite : public TextureManager
 public:
 	Sprite(sdl::Renderer const& r, std::string image_path, int size, int frame_num) noexcept;
 	
-	~Sprite() noexcept;
+	~Sprite();
 
 	void update_animation(void) noexcept;
 

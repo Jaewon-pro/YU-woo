@@ -3,55 +3,28 @@
 #include <iostream>
 
 
-//////////////////////////////////////////////////////
-//				class TextureManager defintion
+TextureManager::TextureManager(sdl::Renderer const& renderer, std::string image_path, int size)
 
-
-
-TextureManager::TextureManager(sdl::Renderer const& renderer, std::string s_path, int size)
-
-try : src{ 0, 0, size, size }, texture{ renderer.ptr(), s_path }
+try : texture{ renderer.ptr(), image_path }, src{ 0, 0, size, size }
 {
-	std::clog << "Success to Load Object image: " << s_path << "\n";
+	std::clog << "Success to Load Object image: " << image_path << "\n";
 }
 
-catch (sdl::Exception & e)
+catch (sdl::Exception const& e)
 {
 	std::cerr << e.what();
-	std::cerr << "\nSo, Use unknown.png\n";
+	std::cerr << "Fail to load Object image" << image_path << "\n";
 
-	//SDL_Texture* p_t = this->load_texture("unknown.png", renderer.ptr());
-	SDL_Texture* p_t = nullptr;
-
-	if (p_t == nullptr) {
-		// unknown.png도 없는 경우
-		std::cerr << "Fail to load Object image: unknown.png\n";
-		sdl::show_message_box(
-			SDL_MESSAGEBOX_ERROR,
-			"Fail to Load Object default Image file!", // 제목
-			"Please, Check the game folder. "
-			"You'd like to re-download a game. ....."
-		);
-		exit(10);
-	}
-	else {
-		// 원하는 이미지는 없고 unknown.png만 불러올 수 있는 경우
-
-		std::cerr << "Success to Load Object image unknown.png \n";
-		sdl::show_message_box(
-			SDL_MESSAGEBOX_ERROR,
-			"Fail to Load Object Image file!", // 제목
-			"Please, Check the game folder. "
-			"You'd like to re-download a game. ....."
-		);
-		// 원래는 이동대입 연산을 해서 자신을 초기화 해줘야 하는데 안 배워서 모르겠음...
-		// 대입 연산자의 문제인가... 모르겠다.
-		// 그래서 일단 종료하도록 해놓음
-		exit(11);
-	}
-	//SDL_DestroyTexture(p_t);
+	sdl::show_message_box(
+		SDL_MESSAGEBOX_ERROR,
+		"Fail to Load Object default Image file!",
+		"Please, Check the game folder. "
+		"You'd like to re-download a game. ....."
+	);
+	exit(10);
 
 }
+
 
 
 TextureManager::TextureManager(SDL_Texture* p_text) noexcept
@@ -104,7 +77,7 @@ Sprite::Sprite(sdl::Renderer const& r, std::string image_path, int size, int fra
 {
 }
 
-Sprite::~Sprite(void) noexcept {
+Sprite::~Sprite(void) {
 	TextureManager::~TextureManager();
 }
 

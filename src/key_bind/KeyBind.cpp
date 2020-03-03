@@ -2,6 +2,7 @@
 
 #include <SDL_keycode.h> // SDLK
 
+
 KeyBind::~KeyBind() noexcept {
 	this->clear();
 }
@@ -23,6 +24,6 @@ void KeyBind::clear(void) noexcept {
 }
 
 
-Command* KeyBind::operator[](int keycode) const noexcept {
-	return this->key.at(keycode);
+Command* KeyBind::operator[](int const sdl_keycode) noexcept {
+	return this->key[sdl_keycode];
 }

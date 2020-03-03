@@ -54,7 +54,7 @@ Screen::Screen(const char* title, std::pair <int, int> const& screen_size, bool 
 	this->texture_button = std::move(TextureManager(this->renderer, path_button, PIXEL_BUTTON));
 }
 
-Screen::~Screen() noexcept {
+Screen::~Screen() {
 	this->key.clear();
 
 	this->texture_button.~TextureManager();

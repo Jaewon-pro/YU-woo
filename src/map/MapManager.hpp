@@ -51,7 +51,7 @@ class MapManager
 public:
 	MapManager(int mod_num) noexcept;
 
-	~MapManager() noexcept;
+	~MapManager();
 
 	int make_locale_from_seed(int col, int line, std::string const& seed) noexcept;
 
@@ -89,7 +89,7 @@ private:
 
 	int distance(std::pair<int, int> const&, std::pair<int, int> const&) const noexcept;
 
-	bool find_way(std::pair<int, int> const& dst, std::pair<int, int> const& src) const noexcept;
+	bool find_way(std::pair<int, int> const dst, std::pair<int, int> const src) const noexcept;
 
 };
 
