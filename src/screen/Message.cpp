@@ -98,7 +98,7 @@ void Message::clear_list(int num) noexcept {
 }
 
 
-// private function
+// private
 
 void Message::make_texture_from_buffer(void) noexcept {
 	// 버퍼에 있는 wstring을 리스트 맨 뒤에 추가함.

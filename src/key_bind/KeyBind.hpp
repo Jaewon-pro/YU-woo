@@ -18,8 +18,8 @@ public:
 	Command* operator[](int const keycode) noexcept;
 
 private:
-	std::map<int, Command*> key; // SDLK, Command
-	MoveCommand move;
+	std::map < int, Command* > key; // SDLK, Command*
+	MoveCommand   move;
 	AttackCommand attack;
-	TestCommand test;
+	TestCommand   test;
 };

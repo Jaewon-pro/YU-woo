@@ -147,6 +147,7 @@ Command* Screen::handle_events(void) noexcept {
 		}
 		if (should_redraw_button == true) break; // 버튼 관련만 하고 게임 내적 요소는 관련x
 		
+
 		//		게임내 요소 확인		//
 
 		int map_col, map_line;

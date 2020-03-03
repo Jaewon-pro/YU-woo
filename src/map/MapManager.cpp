@@ -4,8 +4,6 @@
 #include <random>
 
 
-
-
 MapManager::MapManager(int mod_num) noexcept
 	: mod_num{ mod_num }
 	, current_index{ 0 }

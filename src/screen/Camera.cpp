@@ -1,8 +1,5 @@
 #include "Camera.hpp"
 
-//////////////////////////////////////////////
-//				class Camera
-
 
 Camera::Camera(int width, int height) noexcept
 	: zoom_level{ 64 }
@@ -65,9 +62,7 @@ void Camera::set_screen_size(int const w, int const h) noexcept {
 
 
 sdl::Rect Camera::get_rect_dst(int const map_col, int const map_line) const noexcept {
-	// 카메라 클래스의 목적은 sdl::Rect 로 변환해서 사용하는 것
 	// 맵에서의 위치만 넘겨주면 픽셀 사이즈 zoom_level 맞춰서 반환
-	// 따라서 인자에는 한 블럭의 픽셀 사이즈 넣어서 보내지 마셈
 
 	return {
 		this->anchor_column + (this->zoom_level * map_col),
@@ -77,8 +72,7 @@ sdl::Rect Camera::get_rect_dst(int const map_col, int const map_line) const noex
 }
 
 sdl::Rect Camera::get_rect_dst(double const map_col, double const map_line) const noexcept {
-	// 스프라이트의 맵 위치가 이동중이거나 하면 실수인 경우도 있으므로...
-	// 이것만 있으면 다른 draw함수 수정할 필요 없겠지...
+
 	return {
 		this->anchor_column + static_cast<int>(this->zoom_level * map_col),
 		this->anchor_line   + static_cast<int>(this->zoom_level * map_line),

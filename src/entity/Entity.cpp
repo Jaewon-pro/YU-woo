@@ -105,7 +105,6 @@ int Actor::update_act(void) noexcept {
 
 
 	// 상호작용을 할 수 있는 거리임
-
 	// do interact
 	switch (this->l_command.front().first)
 	{
