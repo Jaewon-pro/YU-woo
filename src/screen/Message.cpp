@@ -8,25 +8,24 @@ Message::Message(sdl::Font const& font, sdl::Renderer const& render) noexcept
 { }
 
 Message::~Message() {
-	this->clear_list();
 }
 
 
 template<>
 Message& Message::operator<< <std::string> (std::string text) noexcept {
-	this->buffer += sdl::Font::string_to_wstring(text);
+	this->buffer += this->ref_font.convert_to_u8string(text);
 	return *this;
 }
 
 template<>
-Message& Message::operator<< <std::wstring> (std::wstring wstr_text) noexcept {
-	this->buffer += wstr_text;
+Message& Message::operator<< <std::u8string> (std::u8string u8str_text) noexcept {
+	this->buffer += u8str_text;
 	return *this;
 }
 
 template<>
 Message& Message::operator<< <int> (int num) noexcept {
-	this->buffer += std::to_wstring(num);
+	this->buffer += this->ref_font.convert_to_u8string(std::to_string(num));
 	return *this;
 }
 
@@ -35,8 +34,8 @@ Message& Message::operator<< <int> (int num) noexcept {
 void Message::end_line(void) noexcept {
 	// 줄을 마무리 하고 텍스쳐를 만들어서 리스트에 추가함. 줄을 마칠때 무조건 써줘야 한다.
 
-	if (this->buffer.compare(L"") == 0) {
-		this->buffer = L" ";
+	if (this->buffer.compare(u8"") == 0) {
+		this->buffer = u8" ";
 	}
 
 	int width_text = 0, h = 0;
@@ -47,20 +46,20 @@ void Message::end_line(void) noexcept {
 
 		// 다음 줄로 넘기기 위한 기준을 찾기 위해 공백을 찾음
 		// 어림잡아 자를 영역의 앞 부분에서 공백이 있는지 검색
-		auto index_space = this->buffer.find(L' ', width_text / this->text_boundary.w);
+		auto index_space = this->buffer.find(u8' ', width_text / this->text_boundary.w);
 
 		if (index_space == std::string::npos) {
 			break;
 		} // 공백도 없는 문장이면 그냥 경계에 짤리더라도 한줄인 텍스쳐로 만듦. 이 경우에는 방법이 생각이 안 난다.
 		
-		std::wstring wstr_tmp = this->buffer.substr(index_space + 1);
+		std::u8string u8str_tmp = this->buffer.substr(index_space + 1);
 
 		// 공백 이전 까지만 텍스쳐로 만듦
 		this->buffer = this->buffer.substr(0, index_space);
 		this->make_texture_from_buffer();
 
 		// 버퍼에 텍스쳐를 만든 텍스트 뒷부분으로 이동 대입
-		this->buffer = std::move(wstr_tmp);
+		this->buffer = std::move(u8str_tmp);
 
 		width_text = 0, h = 0; // 폰트와 글자에 따라 텍스쳐 길이가 달라지므로 문장 길이 확인
 		this->ref_font.size_text(this->buffer, width_text, h);
@@ -68,7 +67,7 @@ void Message::end_line(void) noexcept {
 
 	this->make_texture_from_buffer();
 
-	this->buffer = L"";
+	this->buffer = u8"";
 }
 
 void Message::draw(int margin) const noexcept {
@@ -103,5 +102,5 @@ void Message::clear_list(int num) noexcept {
 void Message::make_texture_from_buffer(void) noexcept {
 	// 버퍼에 있는 wstring을 리스트 맨 뒤에 추가함.
 	this->l_message_texture.emplace_back(
-		sdl::Texture(this->ref_font.make_text_texture(this->buffer.c_str(), this->ref_render.ptr(), this->text_color)));
+		sdl::Texture(this->ref_font.make(this->buffer, this->ref_render.ptr(), this->text_color)));
 }

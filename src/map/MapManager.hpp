@@ -64,7 +64,7 @@ public:
 	int get_size_row(void) const noexcept;
 	int get_size_col(void) const noexcept;
 
-	std::list<Actor> const& get_actor_list(void) const noexcept;
+	std::list <Actor> const& get_actor_list(void) const noexcept;
 	
 	Actor& actor_tmp(void) noexcept;
 
@@ -82,7 +82,7 @@ private:
 	std::vector < Terrain >	v_terrain_info;
 
 private:
-	void init_vec(void) noexcept;
+	void init(void) noexcept;
 
 	void generate_by_seed(int terrain_type, int const& seedB, int const& seedT) noexcept;
 

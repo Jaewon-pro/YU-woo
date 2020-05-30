@@ -11,12 +11,10 @@ class Actor;
 class Coordinate
 {
 public:
-	Coordinate() noexcept;
-
-	Coordinate(double col, double line) noexcept;
+	Coordinate(double col = 0.0, double line = 0.0) noexcept;
 	Coordinate(std::pair<double, double> pos) noexcept;
 
-	virtual ~Coordinate() noexcept;
+	virtual ~Coordinate();
 
 	void set_pos(double col, double line) noexcept;
 
@@ -45,11 +43,9 @@ enum class STATE : int {
 class Actor : public Coordinate
 {
 public:
-	Actor() noexcept;
+	Actor(std::pair<double, double> pos = { 0.0, 0.0 }) noexcept;
 
-	Actor(std::pair<double, double> pos) noexcept;
-
-	~Actor() noexcept;
+	~Actor();
 
 	void set_name(std::wstring const wstr_name) noexcept;
 	

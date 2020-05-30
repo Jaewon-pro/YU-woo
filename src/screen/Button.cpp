@@ -8,23 +8,18 @@ enum class BUTTON : int {
 
 
 Button::Button(TextureManager& te, sdl::Font const& font, sdl::Renderer& render,
-	std::string text,
-	bool const toggle,
-	sdl::Rect size,
-	int image_pixel_size) noexcept
-	: Button(te, font, render, font.string_to_wstring(text).c_str(),
-		toggle, size, image_pixel_size)
-{
-}
+	std::string text, bool const toggle, sdl::Rect size, int image_pixel_size) noexcept
+	: Button(te, font, render, font.convert_to_u8string(text).c_str(), toggle, size, image_pixel_size)
+{ }
 
 Button::Button(TextureManager& te, sdl::Font const& font, sdl::Renderer& render,
-	std::wstring text, bool const toggle, sdl::Rect size, int image_pixel_size) noexcept
+	std::u8string text, bool const toggle, sdl::Rect size, int image_pixel_size) noexcept
 	: is_mouse_on{ false }, is_clicked{ false }
 	, is_toggle_type{ toggle }
 	, image_pixel_size{ image_pixel_size }
 	, size_dst{ size }
 	, ref_texture_button{ te }
-	, texture_text{ font.make_text_texture( text.c_str(), render.ptr() ) }
+	, texture_text{ font.make( text, render.ptr() ) }
 {
 	// 이미지에서 가져올 부분 설정
 	this->ref_texture_button.set_src({ 0, 0, image_pixel_size, image_pixel_size });
@@ -36,7 +31,6 @@ Button::Button(TextureManager& te, sdl::Font const& font, sdl::Renderer& render,
 
 
 Button::~Button(void) {
-	this->texture_text.~Texture();
 }
 
 
@@ -97,24 +91,6 @@ bool Button::check_mouse(int const& col, int const& line, bool press) noexcept {
 
 
 
-sdl::Rect Button::get_rect_dst(int margin) const noexcept {
-	// 화면에 출력할 위치
-	// column, line, 가로, 세로 길이
-
-	// margin 픽셀 만큼 여백을 만듦. default margin = 0
-	return {
-		this->size_dst.x + margin,		this->size_dst.y + margin,
-		this->size_dst.w - margin * 2,	this->size_dst.h - margin * 2,
-	};
-}
-
-
-sdl::Rect Button::get_rect_src_text() const noexcept {
-	// 문자열의 텍스쳐의 위치 받아오는 함수
-
-	return { 0, 0, this->text_width, this->text_height };
-}
-
 void Button::set_text(const char* str_text, sdl::Renderer& render, sdl::Font const& font) noexcept {
 	// 버튼 위 텍스트를 변경하는 함수
 	texture_text = sdl::Texture(font.make_text_texture(str_text, render.ptr()));
@@ -137,4 +113,22 @@ void Button::draw(sdl::Renderer& render) noexcept {
 
 	// 버튼 위에 나타낼 문자열 표시
 	render.render_copy(this->texture_text, this->get_rect_src_text(), this->get_rect_dst(10));
+}
+
+
+// private
+
+sdl::Rect Button::get_rect_dst(int margin) const noexcept {
+	// 화면에 출력할 위치 { column, line, 가로, 세로 길이 }
+
+	return {
+		this->size_dst.x + margin,		this->size_dst.y + margin,
+		this->size_dst.w - margin * 2,	this->size_dst.h - margin * 2,
+	};
+}
+
+sdl::Rect Button::get_rect_src_text(void) const noexcept {
+	// 문자열의 텍스쳐의 위치 받아오는 함수
+
+	return { 0, 0, this->text_width, this->text_height };
 }

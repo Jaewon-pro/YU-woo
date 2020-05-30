@@ -96,6 +96,7 @@ private:
 private:
 	void clear_vectors(void) noexcept;
 
+	void toggle_fullscreen_mode(void) noexcept;
 };
 
 

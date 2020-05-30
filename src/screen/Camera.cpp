@@ -95,7 +95,7 @@ bool Camera::find_mouse_pos(int const mouse_col, int const mouse_line,
 	return true;
 }
 
-void Camera::jump_to_loc(int const map_col, int const map_line) noexcept {
+void Camera::jump_to_location(int const map_col, int const map_line) noexcept {
 	// 게임 맵의 위치를 받고 그 위치로 이동함.
 
 	this->anchor_column = this->semi_width - map_col * this->zoom_level;

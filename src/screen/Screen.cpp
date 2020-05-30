@@ -43,24 +43,20 @@ Screen::Screen(const char* title, std::pair <int, int> const& screen_size, bool 
 		exit(113);
 	}
 
-	std::clog << "Success to make Renderer...\n";
+	std::clog << "Success to Make Renderer...\n";
 	this->window.set_fullscreen(fullscreen);
 
-	std::clog << "Success to load Font: " << font_path << "\n";
+	std::clog << "Success to Load Font: " << font_path << "\n";
 
 	const std::string path_button = "assets/button.png";
 	int constexpr PIXEL_BUTTON = 32;
 
-	this->texture_button = std::move(TextureManager(this->renderer, path_button, PIXEL_BUTTON));
+	this->texture_button = TextureManager(this->renderer, path_button, PIXEL_BUTTON);
 }
 
 Screen::~Screen() {
 	this->key.clear();
 
-	this->texture_button.~TextureManager();
-	this->window.~Window();
-	this->renderer.~Renderer();
-	this->font.~Font();
 }
 
 
@@ -90,12 +86,12 @@ int Screen::load_ingame_texture(void) noexcept {
 
 	sdl::Rect button_rect = { 0, 0, 150, 50 };
 
-	std::list<std::wstring> menu_text{ L"한글", L"GO TO THE MAIN MENU" };
+	std::list <std::u8string> menu_text{ u8"한글", u8"GO TO THE MAIN MENU" };
 
 	for (auto const& text : menu_text) {
 		int constexpr PIXEL_BUTTON = 32;
 
-		this->v_button.emplace_back(std::make_unique< Button >(
+		this->v_button.emplace_back(std::make_unique< Button>(
 			this->texture_button, this->font, this->renderer, text, false, button_rect, PIXEL_BUTTON
 			));
 
@@ -137,24 +133,26 @@ Command* Screen::handle_events(void) noexcept {
 		//		버튼 우선 확인		//
 
 		// 누른 위치가 버튼인지 확인
-		for (auto const& p_button : this->v_button) {
-			if (p_button->check_mouse(mouse_col, mouse_line, true)) {
+		for (auto const& ptr_button : this->v_button) {
+			if (ptr_button->check_mouse(mouse_col, mouse_line, true)) {
 
 				this->menu_type = MENU_TYPE::MAIN_MENU;
 
 				this->should_redraw_button = true;
 			}
 		}
-		if (should_redraw_button == true) break; // 버튼 관련만 하고 게임 내적 요소는 관련x
+		if (this->should_redraw_button == true) {
+			break;
+		} // 버튼 관련만 하고 게임 내적 요소는 관련x
 		
 
 		//		게임내 요소 확인		//
 
 		int map_col, map_line;
 
-		if (this->camera.find_mouse_pos(mouse_col, mouse_line, map_col, map_line) == false)
+		if (this->camera.find_mouse_pos(mouse_col, mouse_line, map_col, map_line) == false) {
 			break;
-
+		}
 		std::clog << map_col << " " << map_line << "\n";
 
 		this->mouse_pos = { map_col, map_line };
@@ -182,9 +180,8 @@ Command* Screen::handle_events(void) noexcept {
 			// 카메라 이동은 화면 이동과 반대 방향
 			this->camera.move_camera(
 				static_cast<int>(this->event_handler.key.keysym.sym == SDLK_LEFT) - static_cast<int>(this->event_handler.key.keysym.sym == SDLK_RIGHT),
-				static_cast<int>(this->event_handler.key.keysym.sym == SDLK_UP) - static_cast<int>(this->event_handler.key.keysym.sym == SDLK_DOWN)
+				static_cast<int>(this->event_handler.key.keysym.sym == SDLK_UP)   - static_cast<int>(this->event_handler.key.keysym.sym == SDLK_DOWN)
 			);
-			
 			this->should_redraw = true;
 
 			break; // 키보드 화살표
@@ -194,25 +191,12 @@ Command* Screen::handle_events(void) noexcept {
 			break;
 			
 		case SDLK_q:
-			this->camera.jump_to_loc(13, 21);
+			this->camera.jump_to_location(13, 21);
 			this->should_redraw = true;
 			break;
 
 		case SDLK_F11:
-			// 전체화면 설정. 반전 시킴.
-			this->is_fullscreen = !this->is_fullscreen;
-
-			this->window.set_fullscreen(this->is_fullscreen);
-
-			const SDL_DisplayMode dm = this->window.display_mode();
-
-			// 화면 크기 변환후 카메라의 위치를 적당히 조절함.
-			this->camera.set_screen_size(dm.w, dm.h);
-			std::clog << dm.w << " " << dm.h << "\n";
-
-			this->should_redraw = true;
-			this->should_redraw_button = true;
-
+			this->toggle_fullscreen_mode();
 			break;
 
 
@@ -259,7 +243,7 @@ void Screen::render(void) const noexcept {
 	this->renderer.present();
 }
 
-void Screen::end_redraw() noexcept {
+void Screen::end_redraw(void) noexcept {
 	this->should_redraw = false;
 }
 
@@ -313,3 +297,18 @@ void Screen::clear_vectors(void) noexcept {
 	this->key.clear();
 }
 
+void Screen::toggle_fullscreen_mode(void) noexcept {
+	// 전체화면 설정. 반전 시킴.
+	this->is_fullscreen = !this->is_fullscreen;
+
+	this->window.set_fullscreen(this->is_fullscreen);
+
+	SDL_DisplayMode const dm = this->window.display_mode();
+
+	// 화면 크기 변환후 카메라의 위치를 적당히 조절함.
+	this->camera.set_screen_size(dm.w, dm.h);
+	std::clog << dm.w << " " << dm.h << "\n";
+
+	this->should_redraw = true;
+	this->should_redraw_button = true;
+}

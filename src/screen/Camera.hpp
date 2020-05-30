@@ -22,7 +22,7 @@ public:
 	bool find_mouse_pos(int const mouse_col, int const mouse_line,
 		int& map_col, int& map_line) const noexcept;
 
-	void jump_to_loc(int const map_col, int const map_line) noexcept;
+	void jump_to_location(int const map_col, int const map_line) noexcept;
 
 
 private:

@@ -4,10 +4,6 @@
 #include "Entity.hpp"
 
 
-Coordinate::Coordinate() noexcept
-	: pos(0.0, 0.0)
-{ }
-
 Coordinate::Coordinate(double col, double line) noexcept
 	: pos(col, line)
 { }
@@ -17,7 +13,7 @@ Coordinate::Coordinate(std::pair<double, double> pos) noexcept
 { }
 
 
-Coordinate::~Coordinate() noexcept {
+Coordinate::~Coordinate() {
 
 }
 
@@ -67,18 +63,11 @@ void Coordinate::round(void) noexcept {
 
 
 
-
-Actor::Actor() noexcept
-	: Coordinate{ 0.0, 0.0 }
-{ }
-
-
-
 Actor::Actor(std::pair<double, double> pos) noexcept
 	: Coordinate(pos)
 { }
 
-Actor::~Actor() noexcept {
+Actor::~Actor() {
 	l_command.clear();
 }
 

@@ -9,7 +9,7 @@ Game::Game(const char* title, bool fullscreen, unsigned max_fps)
 	, map{ 1 }
 {
 
-	this->screen.message_log << L"asÇÑf";
+	this->screen.message_log << u8"asÇÑf";
 	this->screen.message_log.end_line();
 }
 

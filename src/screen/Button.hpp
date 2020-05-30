@@ -14,10 +14,8 @@ public:
 	) noexcept;
 
 	Button(TextureManager& te, sdl::Font const& font, sdl::Renderer& render,
-		std::wstring text,
-		bool const toggle,
-		sdl::Rect size,
-		int image_pixel_size
+		std::u8string text, bool const toggle,
+		sdl::Rect size, int image_pixel_size
 	) noexcept;
 
 
@@ -61,31 +59,24 @@ public:
 	Button() = default;
 
 private:
-	// 마우스가 버튼 위에 있는지
-	bool			is_mouse_on;
+	bool is_mouse_on;
+	bool is_clicked;
 
-	// 누르면 true로 변경 어디에 있든 마우스 떼면 false로 변경
-	bool			is_clicked;
+	bool is_toggle_type; // 캡스락처럼 한 번 누르면 계속 유지되는지 여부
 
-	// 캡스락처럼 한 번 누르면 계속 유지되는지 여부
-	bool			is_toggle_type;
+	int image_pixel_size; // png 이미지에서 잘라올 한 칸의 크기 지정
 
-	// png 이미지에서 잘라올 한 칸의 크기 지정
-	int				image_pixel_size;
+	sdl::Rect size_dst;
 
-	sdl::Rect		size_dst;
+	TextureManager& ref_texture_button;
 
-	TextureManager&	ref_texture_button;
+	sdl::Texture texture_text;
 
-	sdl::Texture	texture_text;
-
-	int				text_width;
-	int				text_height;
-
-
+	int text_width;
+	int text_height;
 
 private:
 	sdl::Rect get_rect_dst(int margin = 0) const noexcept;
-	sdl::Rect get_rect_src_text() const noexcept;
+	sdl::Rect get_rect_src_text(void) const noexcept;
 
 };

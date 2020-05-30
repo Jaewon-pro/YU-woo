@@ -3,11 +3,6 @@
 #include <iostream>
 
 
-/////////////////////////////////////////////////////////////////////
-//					Public funtion
-
-
-
 int Screen::load_main_menu_texture() noexcept {
 	// 메인 메뉴에 필요한 버튼 설정 및 키 설정 불러오기
 
@@ -20,21 +15,20 @@ int Screen::load_main_menu_texture() noexcept {
 
 	auto dm = this->window.display_mode();
 
-	sdl::Rect button_rect{ dm.w * 2 / 3, dm.h / 3, 150, 50 };
+	sdl::Rect button_rect{ 30, 30, 150, 50 };
+	//sdl::Rect button_rect{ dm.w * 2 / 3, dm.h / 3, 150, 50 }; // 원격접속하니 모니터 크기가 정확하지 않아서 임시로 둔다.
 
-	this->v_button.emplace_back(std::make_unique<Button>(
-		this->texture_button, this->font, this->renderer, L"새 game", false,
-		button_rect, PIXEL_BUTTON
+	this->v_button.emplace_back(std::make_unique< Button>(
+		this->texture_button, this->font, this->renderer, u8"새 game", false, button_rect, PIXEL_BUTTON
 		));
 
 	button_rect.y += button_rect.h;
 
-	this->v_button.emplace_back(std::make_unique<Button>(
-		this->texture_button, this->font, this->renderer, "load game", false,
-		button_rect, PIXEL_BUTTON
+	this->v_button.emplace_back(std::make_unique< Button>(
+		this->texture_button, this->font, this->renderer, u8"load game", false, button_rect, PIXEL_BUTTON
 		));
 
-	renderer.clear(this->background_color);
+	this->renderer.clear(this->background_color);
 	this->should_redraw_button = true;
 
 	return 0;
@@ -63,8 +57,8 @@ void Screen::handle_events_main(void) noexcept {
 		break;	// SDL_MOUSEMOTION
 
 	case SDL_MOUSEBUTTONDOWN:	// 마우스 버튼 눌렀을 때
-		// 마우스 픽셀 위치 저장
-		int mouse_col, mouse_line;
+		
+		int mouse_col, mouse_line; // 마우스 픽셀 위치 저장
 		SDL_GetMouseState(&mouse_col, &mouse_line);
 
 		//		버튼 우선 확인		//
@@ -74,7 +68,6 @@ void Screen::handle_events_main(void) noexcept {
 			if (a->check_mouse(mouse_col, mouse_line, true)) {
 				this->menu_type = MENU_TYPE::IN_GAME;
 
-				
 				this->should_redraw_button = true;
 				//break;
 			}

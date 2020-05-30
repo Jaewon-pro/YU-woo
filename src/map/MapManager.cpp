@@ -38,8 +38,6 @@ MapManager::MapManager(int mod_num) noexcept
 MapManager::~MapManager() {
 	this->v_terrain_info.clear();
 	this->v_terrain_info.shrink_to_fit();
-	
-	this->locale[current_index].l_actor.clear();
 }
 
 
@@ -57,7 +55,7 @@ int MapManager::make_locale_from_seed(int col, int line, std::string const& str_
 	} );
 
 	this->current_index = map_number;
-	this->init_vec();
+	this->init();
 
 	this->generate_by_seed(123123, 45, 37);
 
@@ -84,7 +82,7 @@ int MapManager::load_from_saved_file(std::string const& path) noexcept {
 		.map_index = map_number, .col = col, .line = line, .seed = seed
 	});
 
-	this->init_vec();
+	this->init();
 
 	// 저장된 값 대입 나중에 저장된 값을 불러와서 for문으로 일일이 대입하기
 	this->generate_by_seed(1, 45, 37);
@@ -137,7 +135,7 @@ void MapManager::update(void) noexcept {
 // private
 
 
-void MapManager::init_vec(void) noexcept {
+void MapManager::init(void) noexcept {
 	// out of index 에러 방지를 위해서
 
 	Locale_map& locale_map = this->locale[this->current_index];

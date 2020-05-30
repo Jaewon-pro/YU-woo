@@ -13,7 +13,7 @@ try : texture{ renderer.ptr(), image_path }, src{ 0, 0, size, size }
 catch (sdl::Exception const& e)
 {
 	std::cerr << e.what();
-	std::cerr << "Fail to load Object image" << image_path << "\n";
+	std::cerr << "Fail to Load Object image" << image_path << "\n";
 
 	sdl::show_message_box(
 		SDL_MESSAGEBOX_ERROR,
@@ -32,7 +32,6 @@ TextureManager::TextureManager(SDL_Texture* p_text) noexcept
 { }
 
 TextureManager::~TextureManager(void) {
-	this->texture.~Texture();
 }
 
 

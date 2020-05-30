@@ -28,7 +28,7 @@ private:
 	sdl::Rect text_boundary;
 
 	// << 연산자로 입력한 문장들을 보관하는 버퍼
-	std::wstring buffer;
+	std::u8string buffer;
 
 	sdl::Font const& ref_font;
 	sdl::Renderer const& ref_render;
@@ -36,8 +36,9 @@ private:
 	sdl::Color text_color = sdl::Color::White(); // 글자색
 
 	// 텍스트의 텍스쳐들을 리스트로 보관함.
-	std::list<sdl::Texture> l_message_texture;
+	std::list < sdl::Texture > l_message_texture;
 
+private:
 	void make_texture_from_buffer(void) noexcept;
 };
 
