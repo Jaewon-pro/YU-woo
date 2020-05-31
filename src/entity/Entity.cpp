@@ -14,7 +14,6 @@ Coordinate::Coordinate(std::pair<double, double> pos) noexcept
 
 
 Coordinate::~Coordinate() {
-
 }
 
 // public
@@ -68,11 +67,11 @@ Actor::Actor(std::pair<double, double> pos) noexcept
 { }
 
 Actor::~Actor() {
-	l_command.clear();
+	this->l_command.clear();
 }
 
-void Actor::set_name(std::wstring const wstr_name) noexcept {
-	this->name = wstr_name;
+void Actor::set_name(std::u8string const u8str_name) noexcept {
+	this->name = u8str_name;
 }
 
 

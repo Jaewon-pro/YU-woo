@@ -108,7 +108,8 @@ int Screen::load_ingame_texture(void) noexcept {
 Command* Screen::handle_events(void) noexcept {
 	// 단순 화면과 연관된 사용자 입력은 여기서 처리하고
 	// 게임 내적과 연관된 사용자 입력은 class KeyBind, Command 에서 처리한다.
-	
+	int mouse_col, mouse_line;
+
 	switch (this->event_handler.type)
 	{
 	case SDL_QUIT:
@@ -127,7 +128,6 @@ Command* Screen::handle_events(void) noexcept {
 
 	case SDL_MOUSEBUTTONDOWN:
 
-		int mouse_col, mouse_line;
 		SDL_GetMouseState(&mouse_col, &mouse_line);
 
 		//		버튼 우선 확인		//
@@ -162,6 +162,8 @@ Command* Screen::handle_events(void) noexcept {
 
 	case SDL_MOUSEBUTTONUP:
 
+		SDL_GetMouseState(&mouse_col, &mouse_line);
+
 		for (auto const& p_button : this->v_button) {
 			if (p_button->check_mouse(mouse_col, mouse_line, false)) {
 				this->should_redraw_button = true;
@@ -178,7 +180,7 @@ Command* Screen::handle_events(void) noexcept {
 		case SDLK_UP:
 		case SDLK_DOWN:
 			// 카메라 이동은 화면 이동과 반대 방향
-			this->camera.move_camera(
+			this->camera.move(
 				static_cast<int>(this->event_handler.key.keysym.sym == SDLK_LEFT) - static_cast<int>(this->event_handler.key.keysym.sym == SDLK_RIGHT),
 				static_cast<int>(this->event_handler.key.keysym.sym == SDLK_UP)   - static_cast<int>(this->event_handler.key.keysym.sym == SDLK_DOWN)
 			);
@@ -191,7 +193,7 @@ Command* Screen::handle_events(void) noexcept {
 			break;
 			
 		case SDLK_q:
-			this->camera.jump_to_location(13, 21);
+			this->camera.look_at(13, 21);
 			this->should_redraw = true;
 			break;
 
@@ -211,7 +213,7 @@ Command* Screen::handle_events(void) noexcept {
 
 		// me_event.wheel.y 이 반환하는 값은 -4 ~ +4
 		// 세게 당길수록 커지나 대부분 1 아니면 -1 이다. 0은 반환 x
-		this->camera.zoom_camera(this->event_handler.wheel.y);
+		this->camera.zoom(this->event_handler.wheel.y);
 
 		this->should_redraw = true;
 
@@ -304,7 +306,7 @@ void Screen::toggle_fullscreen_mode(void) noexcept {
 	this->window.set_fullscreen(this->is_fullscreen);
 
 	SDL_DisplayMode const dm = this->window.display_mode();
-
+	
 	// 화면 크기 변환후 카메라의 위치를 적당히 조절함.
 	this->camera.set_screen_size(dm.w, dm.h);
 	std::clog << dm.w << " " << dm.h << "\n";

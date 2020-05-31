@@ -15,7 +15,7 @@ MapManager::MapManager(int mod_num) noexcept
 	for (int n = 0; n < 6; ++n) {
 
 		this->v_terrain_info.emplace_back( Terrain {
-			.tag {.mod_id{ mod_id }, .index{ index }, .name{ L"void", } },
+			.tag {.mod_id{ mod_id }, .index{ index }, .name{ u8"void", } },
 			.movement_speed{ -1 }, .transparency{ 0 }, .flammability{ 0 }, .layer{ 0 },
 		} );
 
@@ -26,7 +26,7 @@ MapManager::MapManager(int mod_num) noexcept
 	for (int n = 0; n < 8; ++n) {
 
 		this->v_block_info.emplace_back( Block {
-			 .tag {.mod_id{ mod_id }, .index{ index }, .name{ L"air", } },
+			 .tag {.mod_id{ mod_id }, .index{ index }, .name{ u8"air", } },
 			.hp{ 10 }
 		} );
 
@@ -76,7 +76,7 @@ int MapManager::load_from_saved_file(std::string const& path) noexcept {
 	// from the saved file.
 	int col = 50;
 	int line = 40;
-	std::string seed = "asdf";
+	std::string seed = "asdfasdf";
 
 	this->locale.emplace_back(Locale_map{
 		.map_index = map_number, .col = col, .line = line, .seed = seed
@@ -255,7 +255,9 @@ void MapManager::generate_by_seed(int terrain_type, int const& seedB, int const&
 				locale_map.v_terrain[row][col] = &STONE;
 			}
 			if (locale_map.v_terrain[row][col] == &STONE) {
-				locale_map.v_block[row][col] = &ROCK;
+				if (range(engine_rand) <= seedB) {
+					locale_map.v_block[row][col] = &ROCK;
+				}
 			}
 			if (locale_map.v_terrain[row][col] == &WATER) {
 				locale_map.v_block[row][col] = &WATER_BLOCK;

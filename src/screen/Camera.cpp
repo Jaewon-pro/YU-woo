@@ -9,7 +9,7 @@ Camera::Camera(int width, int height) noexcept
 	, semi_height{ height / 2 }
 { }
 
-void Camera::move_camera(int const col, int const line) noexcept {
+void Camera::move(int const col, int const line) noexcept {
 	// 곱하는 상수는 한번 키를 누를 때 움직이는 픽셀 수이다.
 	int constexpr PIXEL_MOVE = 16;
 
@@ -18,7 +18,7 @@ void Camera::move_camera(int const col, int const line) noexcept {
 }
 
 
-bool Camera::zoom_camera(int const zoom) noexcept {
+bool Camera::zoom(int const zoom) noexcept {
 	// 마우스의 좌표와 관련해서 작동하는 카메라 줌 함수
 
 	// 한번 움직이는 픽셀 수
@@ -56,7 +56,6 @@ void Camera::set_screen_size(int const w, int const h) noexcept {
 
 	this->semi_width = w / 2;
 	this->semi_height = h / 2;
-
 }
 
 
@@ -86,16 +85,15 @@ bool Camera::find_mouse_pos(int const mouse_col, int const mouse_line,
 	// 마우스의 픽셀 좌표를 받아서 현재 한 블럭의 크기로 나눈다.
 	// 게임안에서의 좌표를 레퍼런스로 반환하는 함수
 
-	if ((mouse_col - this->anchor_column) < 0 ||
-		(mouse_line - this->anchor_line) < 0)
+	if ((mouse_col - this->anchor_column) < 0 || (mouse_line - this->anchor_line) < 0) {
 		return false;
-
+	}
 	map_col = (mouse_col - this->anchor_column) / zoom_level;
 	map_line = (mouse_line - this->anchor_line) / zoom_level;
 	return true;
 }
 
-void Camera::jump_to_location(int const map_col, int const map_line) noexcept {
+void Camera::look_at(int const map_col, int const map_line) noexcept {
 	// 게임 맵의 위치를 받고 그 위치로 이동함.
 
 	this->anchor_column = this->semi_width - map_col * this->zoom_level;

@@ -23,7 +23,7 @@ public:
 
 	void set_image_src_from_texture(void) noexcept;
 
-	bool check_mouse(int const& col, int const& line, bool press) noexcept;
+	bool check_mouse(int const col, int const line, bool press) noexcept;
 
 
 	bool get_clicked(void)  const noexcept { return this->is_clicked; }

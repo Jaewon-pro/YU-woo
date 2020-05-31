@@ -25,7 +25,7 @@ Button::Button(TextureManager& te, sdl::Font const& font, sdl::Renderer& render,
 	this->ref_texture_button.set_src({ 0, 0, image_pixel_size, image_pixel_size });
 
 	// text texture의 크기 확인
-	this->text_width = this->texture_text.size().x;
+	this->text_width  = this->texture_text.size().x;
 	this->text_height = this->texture_text.size().y;
 }
 
@@ -58,20 +58,17 @@ void Button::set_image_src_from_texture(void) noexcept {
 
 
 
-bool Button::check_mouse(int const& col, int const& line, bool press) noexcept {
+bool Button::check_mouse(int const col, int const line, bool press) noexcept {
 	// 마우스의 위치에 따라 버튼의 상태를 바꾸는 함수
 
 	// 마우스가 버튼 밖에 있을 경우 false를 리턴함.
 	if (this->size_dst.x > col || this->size_dst.x + this->size_dst.w < col) {
-		// 
-		//if (this->mb_is_mouse_on == false) return true;
 
 		this->is_mouse_on = false;
 		this->is_clicked = false;
 		return false;
 	}
 	if (this->size_dst.y > line || this->size_dst.y + this->size_dst.h < line) {
-		//if (this->mb_is_mouse_on == false) return true;
 
 		this->is_mouse_on = false;
 		this->is_clicked = false;
@@ -122,8 +119,8 @@ sdl::Rect Button::get_rect_dst(int margin) const noexcept {
 	// 화면에 출력할 위치 { column, line, 가로, 세로 길이 }
 
 	return {
-		this->size_dst.x + margin,		this->size_dst.y + margin,
-		this->size_dst.w - margin * 2,	this->size_dst.h - margin * 2,
+		this->size_dst.x + margin,     this->size_dst.y + margin,
+		this->size_dst.w - margin * 2, this->size_dst.h - margin * 2,
 	};
 }
 

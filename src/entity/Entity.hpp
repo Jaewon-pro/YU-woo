@@ -47,10 +47,10 @@ public:
 
 	~Actor();
 
-	void set_name(std::wstring const wstr_name) noexcept;
+	void set_name(std::u8string const u8str_name) noexcept;
 	
 
-	std::wstring get_name(void) const noexcept { return this->name; }
+	std::u8string get_name(void) const noexcept { return this->name; }
 
 	int update_act(void) noexcept;
 
@@ -69,8 +69,8 @@ private:
 	double speed = 0.1; // 1 tick 에 움직일 수 있는 칸수
 	STATE state = STATE::WAIT;
 
-	std::wstring name;
-	std::list<std::pair<STATE, std::pair <double, double>> > l_command;
+	std::u8string name;
+	std::list < std::pair<STATE, std::pair <double, double>> > l_command;
 
 
 private:

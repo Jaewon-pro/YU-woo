@@ -11,7 +11,7 @@ struct game_tag
 {
 	int mod_id; // 모드마다 부여된 고유 번호
 	int index;  // 모드 제작자가 부여한 고유 번호
-	std::wstring name;
+	std::u8string name;
 };
 
 

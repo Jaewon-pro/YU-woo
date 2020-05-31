@@ -3,7 +3,7 @@
 #include <iostream>
 
 
-int Screen::load_main_menu_texture() noexcept {
+int Screen::load_main_menu_texture(void) noexcept {
 	// 메인 메뉴에 필요한 버튼 설정 및 키 설정 불러오기
 
 	std::clog << "\nLoading a main menu\n";
@@ -38,6 +38,8 @@ int Screen::load_main_menu_texture() noexcept {
 
 void Screen::handle_events_main(void) noexcept {
 
+	int mouse_col, mouse_line; // 마우스 픽셀 위치 저장
+
 	switch (this->event_handler.type)
 	{
 	case SDL_QUIT:
@@ -58,7 +60,6 @@ void Screen::handle_events_main(void) noexcept {
 
 	case SDL_MOUSEBUTTONDOWN:	// 마우스 버튼 눌렀을 때
 		
-		int mouse_col, mouse_line; // 마우스 픽셀 위치 저장
 		SDL_GetMouseState(&mouse_col, &mouse_line);
 
 		//		버튼 우선 확인		//
@@ -77,6 +78,7 @@ void Screen::handle_events_main(void) noexcept {
 
 
 	case SDL_MOUSEBUTTONUP:		// 마우스 버튼 들었을 때
+		SDL_GetMouseState(&mouse_col, &mouse_line);
 
 		for (auto const& a : this->v_button) {
 			if (a->check_mouse(mouse_col, mouse_line, false)) {

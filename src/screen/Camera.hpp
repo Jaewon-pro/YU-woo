@@ -7,14 +7,11 @@ class Camera
 public:
 	Camera(int screen_width, int screen_height) noexcept;
 
-	void move_camera(int const dcol, int const dline) noexcept;
+	void move(int const dcol, int const dline) noexcept;
 
-	bool zoom_camera(int const zoom) noexcept;
+	bool zoom(int const zoom) noexcept;
 
 	void set_screen_size(int const w, int const h) noexcept;
-
-	int get_col()	const { return this->anchor_column; }
-	int get_line()	const { return this->anchor_line; }
 
 	sdl::Rect get_rect_dst(int const col, int const line) const noexcept;
 	sdl::Rect get_rect_dst(double const col, double const line) const noexcept;
@@ -22,7 +19,7 @@ public:
 	bool find_mouse_pos(int const mouse_col, int const mouse_line,
 		int& map_col, int& map_line) const noexcept;
 
-	void jump_to_location(int const map_col, int const map_line) noexcept;
+	void look_at(int const map_col, int const map_line) noexcept;
 
 
 private:

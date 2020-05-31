@@ -8,13 +8,11 @@ Game::Game(const char* title, bool fullscreen, unsigned max_fps)
 	, screen{ title, this->import_manage.get_size(), fullscreen, this->import_manage.get_font_path() }
 	, map{ 1 }
 {
-
-	this->screen.message_log << u8"asÇÑf";
+	this->screen.message_log << u8"asÇÑfìéåëÚâÏ£";
 	this->screen.message_log.end_line();
 }
 
 Game::~Game() {
-
 }
 
 
@@ -123,7 +121,7 @@ int Game::game_loop_main_menu(void) noexcept {
 	this->screen.load_main_menu_texture();
 
 	while (this->screen.get_menu_type() == MENU_TYPE::MAIN_MENU) {
-		auto frame_start = SDL_GetTicks();
+		auto frame_start = sdl::Timer::ticks_u32();
 
 		if (this->screen.get_redraw_button()) {
 			this->screen.draw_buttons();
@@ -135,7 +133,7 @@ int Game::game_loop_main_menu(void) noexcept {
 		this->screen.handle_events_main();
 
 		// Limit maximum fps.
-		auto frame_time = SDL_GetTicks() - frame_start;
+		auto frame_time = sdl::Timer::ticks_u32() - frame_start;
 
 		// Delay game to reduce the cpu memory consum.
 		if (FRAME_DELAY > frame_time) {
@@ -161,7 +159,6 @@ void Game::draw_map(void) noexcept {
 
 			screen.draw_terrain(map.get_terrain_idx({ col, row }), col, row);
 			screen.draw_block(map.get_block_idx({ col, row }), col, row);
-			
 		}
 	}
 }
